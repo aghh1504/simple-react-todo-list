@@ -18,8 +18,7 @@ export default class App extends Component {
 
   onSubmit = (event) => {
     event.preventDefault()
-    this.state.items.push(this.state.term)
-    this.setState({term: '', items: this.state.items})
+    this.setState(prevState => ({term: '', items: prevState.items.concat(this.state.term)}))
   }
 
   render() {
