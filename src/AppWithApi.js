@@ -9,6 +9,7 @@ export default class App extends Component {
       term: '',
       items: []
     };
+
   }
 
   componentDidMount() {
@@ -24,7 +25,7 @@ export default class App extends Component {
       })
     })
     .then((res) => res.json())
-    .then(( data ) => {
+    .then(data => {
       this.setState({
         listId: data.list.id
       });
@@ -37,32 +38,27 @@ export default class App extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    const { listId, term } = this.state;
 
     fetch('https://todo-api-london.now.sh/items', {
       method: 'POST',
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
         item: {
-          list_id: listId,
-          description: term
+          list_id: this.state.listId,
+          description: this.state.term
         }
       })
     })
-    .then(() => {
-      return fetch(`https://todo-api-london.now.sh/lists/${listId}`, {
-        method: 'GET',
-        headers: {
-          'content-type': 'application/json',
-        }
-      }).then((res) => res.json())
-    })
-    .then((data) => {
+    .then(res =>
+      fetch(`https://todo-api-london.now.sh/lists/${this.state.listId}`)
+    )
+    .then(res => res.json())
+    .then(data => {
       this.setState({
-        items: data.list.items.map(({ description }) => description)
-      })
+        items: data.list.items
+      });
     });
   }
 
@@ -73,7 +69,7 @@ export default class App extends Component {
           <input value={this.state.term} onChange={this.onChange} />
           <button>Submit</button>
         </form>
-        <List items={this.state.items} />
+        <List items={this.state.items.map(item => item.description)} />
       </div>
     );
   }

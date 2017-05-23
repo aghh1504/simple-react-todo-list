@@ -1,9 +1,10 @@
 import React from 'react';
 
-const List = props => (
+const List = ({ items }) => (
   <ul>
+    <h1>Hello</h1>
     {
-          props.items.map((item, index) => <li key={index}>{item}</li>)
+      items && items.map((item, index) => <li key={index}>{item}</li>)
     }
   </ul>
   );
